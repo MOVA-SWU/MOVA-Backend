@@ -50,4 +50,14 @@ public class GlobalExceptionHandler {
                 .status(status.getHttpStatus())
                 .body(body);
     }
+
+    // 중복 기록 예외 처리 핸들러 추가
+    @ExceptionHandler(DuplicateRecordException.class)
+    public ResponseEntity<ErrorDto.ErrorResponse> handleDuplicate(DuplicateRecordException ex) {
+        ErrorStatus status = ErrorStatus.CONFLICT;  // 409
+        ErrorDto.ErrorResponse body = new ErrorDto.ErrorResponse(status.getCode(), ex.getMessage());
+        return ResponseEntity
+                .status(status.getHttpStatus())
+                .body(body);
+    }
 }

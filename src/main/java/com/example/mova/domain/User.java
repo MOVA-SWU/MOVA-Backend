@@ -7,6 +7,7 @@ import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -80,5 +81,8 @@ public class User extends BaseEntity implements UserDetails {
     public boolean isEnabled() {
         return true;
     } // 계정 활성화 여부
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<MovieRecord> movieRecordList = new ArrayList<>();
 
 }

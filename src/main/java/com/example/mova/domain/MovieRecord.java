@@ -1,7 +1,11 @@
 package com.example.mova.domain;
 
+
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.time.LocalDate;
+
 
 @Entity
 @Getter
@@ -21,6 +25,23 @@ public class MovieRecord extends BaseEntity{
     private String imageUrl;
 
     @Column(nullable = false)
-    private Integer rating;
+    private Double rating;
+
+    @Column(nullable = false)
+    private LocalDate dateTime;
+
+    @Column(nullable = false, length = 1000)
+    private String content;
+
+    public void update(Double rating, LocalDate dateTime, String content){
+        this.rating = rating;
+        this.dateTime = dateTime;
+        this.content = content;
+    }
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
 
 }
