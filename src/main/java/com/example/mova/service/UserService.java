@@ -22,10 +22,6 @@ public class UserService {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     public UserDto.UserSignupResponseDto signup(UserDto.UserSignupRequestDto request){
 
-        if(userRepository.findByEmail(request.getEmail()).isPresent()){
-            throw new IllegalArgumentException(("이미 사용 중인 이메일입니다."));
-        }
-
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
         User newUser = User.builder()
@@ -39,6 +35,14 @@ public class UserService {
                 .email(newUser.getEmail())
                 .nickname(newUser.getNickname())
                 .build();
+    }
+
+    public boolean checkEmailDuplicated(String email) {
+
+        if (userRepository.findByEmail(email).isPresent()) {
+            throw new IllegalArgumentException("이미 사용 중인 이메일입니다.");
+        }
+        return true;
     }
 
     @Transactional

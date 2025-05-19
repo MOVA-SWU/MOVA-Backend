@@ -26,6 +26,13 @@ public class MovieRecordController {
         return ResponseEntity.ok(list);
     }
 
+    //영화홈화면에 최신기록 보여주는 페이지
+    @GetMapping("/latest")
+    public ResponseEntity<List<MovieRecordDto.MovieLatestResponseDto>> findMovieLatest(){
+        List<MovieRecordDto.MovieLatestResponseDto> latestList = movieRecordService.findLatest();
+        return ResponseEntity.ok(latestList);
+    }
+
     //영화기록 작성 페이지
     @PostMapping("/movies")
     public ResponseEntity<MovieRecordDto.MoiveRecordResponseDto> addMovieRecord(@Valid @RequestBody MovieRecordDto.MovieRecordRequestDto request){

@@ -53,4 +53,13 @@ public class MovieRecordDto {
         private Long movieId;
         private String imageUrl;
     }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class MovieLatestResponseDto{
+        private Long movieId;
+        private String imageUrl;
+    }
 }

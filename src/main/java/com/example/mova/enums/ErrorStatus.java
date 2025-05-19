@@ -14,7 +14,7 @@ public enum ErrorStatus {
     FORBIDDEN(HttpStatus.FORBIDDEN, "403 Forbidden", "요청한 콘텐츠에 접근할 권한이 없습니다."),
     NOT_FOUND(HttpStatus.NOT_FOUND, "404 Not Found", "요청한 URI를 찾을 수 없습니다."),
     CONFLICT(HttpStatus.CONFLICT, "409 Resources That Exist", "이미 존재하는 리소스입니다."),
-    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "500 Internal Server Error")
+    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "500 Internal Server Error", "코드 내부의 문제입니다.")
     ;
 
     private final HttpStatus httpStatus;

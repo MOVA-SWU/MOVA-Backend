@@ -31,6 +31,17 @@ public class MovieRecordService {
                 .collect(Collectors.toList());
     }
 
+    //홈화면에 최신 기록 두 건 조회
+    public List<MovieRecordDto.MovieLatestResponseDto> findLatest(){
+        return movieRecordRepository.findTop2ByOrderByCreatedAtDesc().stream()
+                .map(movieRecord -> MovieRecordDto.MovieLatestResponseDto.builder()
+                        .movieId(movieRecord.getId())
+                        .imageUrl(movieRecord.getImageUrl())
+                        .build())
+                .collect(Collectors.toList());
+    }
+
+
     //기록 추가
     @Transactional
     public MovieRecordDto.MoiveRecordResponseDto addMovieRecord(MovieRecordDto.MovieRecordRequestDto request, String email){
