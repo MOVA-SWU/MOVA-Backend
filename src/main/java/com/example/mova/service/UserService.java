@@ -6,11 +6,12 @@ import com.example.mova.dto.JwtToken;
 import com.example.mova.dto.UserDto;
 import com.example.mova.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -73,6 +74,17 @@ public class UserService {
     public User findByEmail(String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("없는 이메일입니다."));
+    }
+
+    @Transactional(readOnly = true)
+    public UserDto.MyPageResponseDto getMyPage(Long userId){
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("유저를 찾을 수 없습니다."));
+
+        return UserDto.MyPageResponseDto.builder()
+                .profileImage(user.getProfileImage())
+                .nickname(user.getNickname())
+                .build();
     }
 
     @Transactional

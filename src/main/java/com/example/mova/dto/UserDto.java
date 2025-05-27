@@ -67,5 +67,15 @@ public class UserDto {
         private String nickname;
     }
 
+    //마이페이지 조회
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class MyPageResponseDto{
+        private String profileImage;
+        private String nickname;
+    }
+
 
 }

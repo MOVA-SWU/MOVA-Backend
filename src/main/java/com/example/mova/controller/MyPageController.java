@@ -9,6 +9,7 @@ import com.example.mova.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +20,14 @@ public class MyPageController {
 
     private final CollectingCharactersService collectingCharactersService;
     private final UserService userService;
+
+    @GetMapping
+    @PreAuthorize("isAuthenticated()")                    // 인증된 사용자만 접근
+    public ResponseEntity<UserDto.MyPageResponseDto> myPage(@AuthenticationPrincipal User principal){
+        UserDto.MyPageResponseDto response = userService.getMyPage(principal.getId());
+        return ResponseEntity.ok(response);
+    }
+
     @GetMapping("/collection-status")
     public ResponseEntity<CollectingDto> myCharacters(
             @AuthenticationPrincipal User principal){

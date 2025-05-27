@@ -35,6 +35,8 @@ public class User extends BaseEntity implements UserDetails {
 
     private String nickname;
 
+    //유저의 프로필 사진을 보여주기 -> 서버에서 직접 집어넣기
+    private String profileImage;
 
     private String refreshToken;
 
