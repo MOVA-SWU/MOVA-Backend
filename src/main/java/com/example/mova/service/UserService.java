@@ -75,6 +75,7 @@ public class UserService {
                 .orElseThrow(() -> new IllegalArgumentException("없는 이메일입니다."));
     }
 
+    @Transactional
     public void updateNickname(Long userId, String newNickname){
         User user = userRepository.findById(userId)
                 .orElseThrow(()-> new EntityNotFoundException("유저가 존재하지 않습니다."));
