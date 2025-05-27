@@ -77,8 +77,8 @@ public class MovieRecordService {
                 .build();
     }
 
-    public MovieRecordDto.MoiveRecordResponseDto findMovieRecord(long movieId){
-        MovieRecord movieRecord = movieRecordRepository.findById(movieId)
+    public MovieRecordDto.MoiveRecordResponseDto findMovieRecord(long movieRecordId){
+        MovieRecord movieRecord = movieRecordRepository.findById(movieRecordId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 글을 찾을 수 없습니다."));
 
         return MovieRecordDto.MoiveRecordResponseDto.builder()

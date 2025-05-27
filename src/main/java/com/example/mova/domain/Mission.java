@@ -21,6 +21,9 @@ public class Mission extends BaseEntity{
     private Long missionId;
 
     @Column(nullable = false)
+    private String movie;
+
+    @Column(nullable = false)
     private String mission;
 
     @Column(nullable = false)
@@ -34,9 +37,18 @@ public class Mission extends BaseEntity{
     private Category category;
 
     @OneToMany(mappedBy = "mission", cascade = CascadeType.ALL)
-    private List<MyMisssion> myMisssionList = new ArrayList<>();
+    private List<MyMission> myMissionList = new ArrayList<>();
 
+    @OneToOne
+    @JoinColumn(name = "point_id")
+    private Point point;
 
+    @OneToOne
+    @JoinColumn(name = "movie_record_id")
+    private MovieRecord movieRecord;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "character_id")
+    private Character character;
 
 }

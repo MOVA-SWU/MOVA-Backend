@@ -48,9 +48,9 @@ public class MovieRecordController {
     }
 
     //영화기록한 내용 조회페이지
-    @GetMapping("/movies/{movieId}")
-    public ResponseEntity<MovieRecordDto.MoiveRecordResponseDto> findMovieRecord(@PathVariable Long movieId) {
-        MovieRecordDto.MoiveRecordResponseDto movieResponses = movieRecordService.findMovieRecord(movieId);
+    @GetMapping("/movie-records/{movieRecordId}")
+    public ResponseEntity<MovieRecordDto.MoiveRecordResponseDto> findMovieRecord(@PathVariable Long movieRecordId) {
+        MovieRecordDto.MoiveRecordResponseDto movieResponses = movieRecordService.findMovieRecord(movieRecordId);
         return ResponseEntity.ok().body(movieResponses);
     }
 }

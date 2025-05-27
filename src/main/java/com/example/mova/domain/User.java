@@ -38,6 +38,17 @@ public class User extends BaseEntity implements UserDetails {
 
     private String refreshToken;
 
+    @Column(nullable = false)
+    private Integer totalPoints = 0;
+
+    public void addPoints(int cost){
+        this.totalPoints += cost;
+    }
+
+    public void subtract(int sponsorCost){
+        this.totalPoints -= sponsorCost;
+    }
+
     public void updateRefreshToken(String updateRefreshToken){
         this.refreshToken = updateRefreshToken;
     }
@@ -84,5 +95,8 @@ public class User extends BaseEntity implements UserDetails {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<MovieRecord> movieRecordList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<MyMission> myMissionList = new ArrayList<>();
 
 }

@@ -2,6 +2,7 @@ package com.example.mova.errorhandler;
 
 
 import com.example.mova.enums.ErrorStatus;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -17,7 +18,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorDto.ErrorResponse> handleValidation(MethodArgumentNotValidException ex) {
         String msg = ex.getBindingResult().getFieldErrors().stream()
-                .map(f -> f.getDefaultMessage())
+                .map(DefaultMessageSourceResolvable::getDefaultMessage)
                 .collect(Collectors.joining(", "));
         ErrorDto.ErrorResponse body = new ErrorDto.ErrorResponse(
                 ErrorStatus.BAD_REQUEST.getCode(), msg);
@@ -58,6 +59,27 @@ public class GlobalExceptionHandler {
         ErrorDto.ErrorResponse body = new ErrorDto.ErrorResponse(status.getCode(), ex.getMessage());
         return ResponseEntity
                 .status(status.getHttpStatus())
+                .body(body);
+    }
+
+    // 해당 내용을 찾을 없는 예외 처리 추가
+    @ExceptionHandler(ApiExceptions.MovieRecordNotFoundException.class)
+    public ResponseEntity<ErrorDto.ErrorResponse> handleMovieRecordNotFound(ApiExceptions.MovieRecordNotFoundException ex){
+        ErrorDto.ErrorResponse body =
+                new ErrorDto.ErrorResponse(ErrorStatus.NOT_FOUND.getCode(), ex.getMessage());
+
+        return ResponseEntity
+                .status(ErrorStatus.NOT_FOUND.getHttpStatus())
+                .body(body);
+    }
+
+    @ExceptionHandler(ApiExceptions.MyMissionNotFoundException.class)
+    public ResponseEntity<ErrorDto.ErrorResponse> handleMyMissionNotFound(ApiExceptions.MyMissionNotFoundException ex){
+        ErrorDto.ErrorResponse body =
+                new ErrorDto.ErrorResponse(ErrorStatus.NOT_FOUND.getCode(), ex.getMessage());
+
+        return ResponseEntity
+                .status(ErrorStatus.NOT_FOUND.getHttpStatus())
                 .body(body);
     }
 }
