@@ -5,6 +5,7 @@ import com.example.mova.domain.User;
 import com.example.mova.dto.JwtToken;
 import com.example.mova.dto.UserDto;
 import com.example.mova.repository.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -72,6 +73,12 @@ public class UserService {
     public User findByEmail(String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("없는 이메일입니다."));
+    }
+
+    public void updateNickname(Long userId, String newNickname){
+        User user = userRepository.findById(userId)
+                .orElseThrow(()-> new EntityNotFoundException("유저가 존재하지 않습니다."));
+        user.update(newNickname);
     }
 
 }

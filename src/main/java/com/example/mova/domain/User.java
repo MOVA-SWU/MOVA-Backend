@@ -38,20 +38,21 @@ public class User extends BaseEntity implements UserDetails {
 
     private String refreshToken;
 
-    @Column(nullable = false)
-    private Integer totalPoints = 0;
+    //@Column(nullable = false)
+    //private Integer totalPoints = 0;
 
-    public void addPoints(int cost){
-        this.totalPoints += cost;
-    }
+    //public void addPoints(int cost){
+        //this.totalPoints += cost;
+    //}
 
-    public void subtract(int sponsorCost){
-        this.totalPoints -= sponsorCost;
-    }
+    //public void subtract(int sponsorCost){
+        //this.totalPoints -= sponsorCost;
+    //}
 
     public void updateRefreshToken(String updateRefreshToken){
         this.refreshToken = updateRefreshToken;
     }
+
     //사용자 이름 변경
     public User update(String nickname){
         this.nickname = nickname;
@@ -98,5 +99,8 @@ public class User extends BaseEntity implements UserDetails {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<MyMission> myMissionList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true )
+    private List<CollectingCharacters> collectingCharactersList = new ArrayList<>();
 
 }

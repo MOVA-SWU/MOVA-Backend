@@ -7,7 +7,6 @@ import lombok.*;
 
 public class UserDto {
     @Getter
-    @Setter
     public static class UserSignupRequestDto{
         @NotBlank(message = "이메일을 입력해주세요")
         @Email(message = "유효한 이메일 형식이어야 합니다")
@@ -32,8 +31,6 @@ public class UserDto {
     public static class EmailCheckResponseDto{
         private boolean duplicated;
     }
-
-
 
     @Builder
     @Getter
@@ -63,4 +60,12 @@ public class UserDto {
         private String email;
         private JwtToken token;
     }
+
+    @Getter
+    public static class NickNameUpdateDto{
+        @NotBlank(message = "닉네임은 비워둘 수 없습니다.")
+        private String nickname;
+    }
+
+
 }
