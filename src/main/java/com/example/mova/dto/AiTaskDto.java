@@ -1,20 +1,19 @@
 package com.example.mova.dto;
 
 import com.example.mova.enums.MissionStatus;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 public class AiTaskDto {
 
     @Getter
+    @Setter
     public static class RequestToAi{
         private String title;
     }
 
     @Getter
     @Setter
+    @Builder
     @NoArgsConstructor
     @AllArgsConstructor
     public static class ResponseFromAi{

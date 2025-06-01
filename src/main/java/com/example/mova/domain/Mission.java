@@ -1,6 +1,6 @@
 package com.example.mova.domain;
 
-import com.example.mova.enums.Category;
+import com.example.mova.enums.MissionStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -23,18 +23,15 @@ public class Mission extends BaseEntity{
     @Column(nullable = false)
     private String movie;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String mission;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String effect;
 
-    @Column(nullable = false)
-    private String image_url;
-
     @Enumerated(EnumType.STRING)
-    @Column(name = "theme", nullable = false)
-    private Category category;
+    @Column(nullable = false, columnDefinition = "VARCHAR(20) DEFAULT 'AVAILABLE'")
+    private MissionStatus missionStatus;
 
     @OneToMany(mappedBy = "mission", cascade = CascadeType.ALL)
     private List<MyMission> myMissionList = new ArrayList<>();
@@ -49,6 +46,14 @@ public class Mission extends BaseEntity{
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "character_id")
-    private Character character;
+    private StoryCharacter storyCharacter;
+
+    public Integer getCost() {
+        return this.point.getCost();
+    }
+
+    public void update(MissionStatus status){
+        this.missionStatus = status;
+    }
 
 }

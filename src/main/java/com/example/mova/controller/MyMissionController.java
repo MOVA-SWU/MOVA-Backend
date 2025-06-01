@@ -29,21 +29,4 @@ public class MyMissionController {
        return ResponseEntity.ok(missionList);
     }
 
-
-    //영화 기록글 내에서 조회되는 AI 미션
-    @GetMapping("/movie-records/{movieRecordId}/missions")
-    public ResponseEntity<MyMissionDto.AiMissionInquire> getAiContent(@PathVariable Long movieRecordId){
-        MyMissionDto.AiMissionInquire aiMission = myMissionService.findAiMission(movieRecordId);
-        return ResponseEntity.ok(aiMission);
-    }
-
-    @PatchMapping("/movie-records/{movieRecordId}/missions/{myMissionId}/complete")
-    public ResponseEntity<String> completeMission(
-            @PathVariable Long movieRecordId, @PathVariable Long myMissionId){
-        myMissionService.changeStatus(movieRecordId, myMissionId);
-        return ResponseEntity
-                .ok("미션을 수행하셨습니다."); //반환을 메세지로 함.
-    }
-
-
 }

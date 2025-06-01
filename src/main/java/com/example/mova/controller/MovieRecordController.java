@@ -1,7 +1,9 @@
 package com.example.mova.controller;
 
 import com.example.mova.config.JWTUtil;
+import com.example.mova.dto.AiTaskDto;
 import com.example.mova.dto.MovieRecordDto;
+import com.example.mova.service.AiAnalyzeService;
 import com.example.mova.service.MovieRecordService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +20,7 @@ import java.util.List;
 public class MovieRecordController {
 
     private final MovieRecordService movieRecordService;
+    private final AiAnalyzeService aiAnalyzeService;
 
     //홈화면의 영화 리스트 보여줌
     @GetMapping
@@ -35,16 +38,16 @@ public class MovieRecordController {
 
     //영화기록 작성 페이지
     @PostMapping("/movies")
-    public ResponseEntity<MovieRecordDto.MoiveRecordResponseDto> addMovieRecord(@Valid @RequestBody MovieRecordDto.MovieRecordRequestDto request){
+    public ResponseEntity<AiTaskDto.ResponseFromAi> addMovieRecord(@Valid @RequestBody MovieRecordDto.MovieRecordRequestDto request){
 
         //현재 로그인한 사용자 이메일 꺼내기
         String email = JWTUtil.getCurrentUsername();
 
-        MovieRecordDto.MoiveRecordResponseDto created = movieRecordService.addMovieRecord(request, email);
+        AiTaskDto.ResponseFromAi response = aiAnalyzeService.analyzeAndSaveMovieRecord(request, email);
         //201 created 응답
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(created);
+                .body(response);
     }
 
     //영화기록한 내용 조회페이지

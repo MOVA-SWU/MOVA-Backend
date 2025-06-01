@@ -3,8 +3,6 @@ package com.example.mova.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDate;
-
 @Entity
 @Getter
 @Setter
@@ -22,6 +20,6 @@ public class CollectingCharacters extends BaseEntity{
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "character_id")
-    private Character character;
+    private StoryCharacter storyCharacter;
 
 }

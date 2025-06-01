@@ -37,23 +37,4 @@ public class MyMissionService {
                 .build();
     }
 
-    //AI 미션 조회하는 서비스 구현 코드
-    public MyMissionDto.AiMissionInquire findAiMission(long movieRecordId) {
-        Mission myMission = missionRepository
-                .findByMovieRecordId(movieRecordId)
-                .orElseThrow(() -> new ApiExceptions.MovieRecordNotFoundException(movieRecordId));
-
-        return new MyMissionDto.AiMissionInquire.builder()
-
-
-    }
-
-    //AI 미션 상태를 완료로 변환하는 코드
-    public MyMissionDto.myMissionStatusChangeDto changeStatus(long movieRecordId, long myMissionId){
-        MyMission mission = myMissionRepository.findByMyMissionIdAndMovieRecordId(myMissionId, movieRecordId)
-                .orElseThrow(() -> new ApiExceptions.MyMissionNotFoundException(myMissionId));
-    }
-
-
-
 }

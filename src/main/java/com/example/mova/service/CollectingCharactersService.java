@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -21,7 +20,7 @@ public class CollectingCharactersService {
 
         //2) 캐릭터 이미지 URL만 꺼내서 리스트로
         List<String> urls = entities.stream()
-                .map(cc -> cc.getCharacter().getImageUrl())
+                .map(cc -> cc.getStoryCharacter().getImageUrl())
                 .toList();
 
         //3) DTO에 총 개수와 URL 리스트 담아서 반환
