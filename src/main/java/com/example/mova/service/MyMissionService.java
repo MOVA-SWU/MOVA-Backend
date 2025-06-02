@@ -24,7 +24,7 @@ public class MyMissionService {
 
     //상태에 따라 미션들 조회하기
     public List<MyMissionDto.myMissionResponseDto> listByStatus(MissionStatus missionStatus){
-        return myMissionRepository.findAllByMissionStatus(missionStatus).stream()
+        return myMissionRepository.findAllByMission_MissionStatus(missionStatus).stream()
                 .map(this ::toListDto)
                 .collect(Collectors.toList());
     }

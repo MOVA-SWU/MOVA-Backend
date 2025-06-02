@@ -24,6 +24,6 @@ public class StoryCharacter extends BaseEntity{
     @Column(name = "image_url", nullable = false)
     private String imageUrl;
 
-    @OneToMany(mappedBy = "character", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "storyCharacter", cascade = CascadeType.ALL)
     private List<Mission> missionList = new ArrayList<>();
 }

@@ -8,6 +8,7 @@ import com.example.mova.service.CollectingCharactersService;
 import com.example.mova.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -24,6 +25,9 @@ public class MyPageController {
     @GetMapping
     @PreAuthorize("isAuthenticated()")                    // 인증된 사용자만 접근
     public ResponseEntity<UserDto.MyPageResponseDto> myPage(@AuthenticationPrincipal User principal){
+        if(principal == null){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
         UserDto.MyPageResponseDto response = userService.getMyPage(principal.getId());
         return ResponseEntity.ok(response);
     }
