@@ -4,7 +4,7 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://google/mova?cloudSqlInstance=analytical-poet-461806-t7:asia-northeast3:root&socketFactory=com.google.cloud.sql.mysql.SocketFactory&useSSL=false
+    url: jdbc:mysql://google/mova?cloudSqlInstance=analytical-poet-461806-t7:asia-northeast3:root
     username: root
     password: ${DB_PASSWORD}
   thymeleaf:
