@@ -9,6 +9,6 @@ FROM eclipse-temurin:17-jdk
 
 EXPOSE 8080
 
-COPY --from=builder /app/build/libs/Mova-0.0.1-SNAPSHOT-plain.jar app.jar
+COPY --from=builder /app/build/libs/*.jar app.jar
 
 ENTRYPOINT ["sh", "-c", "java -Dserver.port=$PORT -jar /app.jar"]
