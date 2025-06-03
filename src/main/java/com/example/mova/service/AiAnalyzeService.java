@@ -5,6 +5,7 @@ import com.example.mova.domain.*;
 import com.example.mova.dto.AiTaskDto;
 import com.example.mova.dto.MovieRecordDto;
 import com.example.mova.enums.Category;
+import com.example.mova.enums.MissionStatus;
 import com.example.mova.errorhandler.DuplicateRecordException;
 import com.example.mova.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +18,10 @@ import org.springframework.transaction.annotation.Transactional;
 public class AiAnalyzeService {
 
     private final MovieRecordRepository movieRecordRepository;
+    private final MyMissionRepository myMissionRepository;
     private final MissionRepository missionRepository;
     private final CharacterRepository characterRepository;
+    private final CollectingCharactersRepository collectingCharactersRepository;
     private final PointRepository pointRepository;
     private final UserRepository userRepository;
     private final AiClient aiClient;
@@ -54,27 +57,45 @@ public class AiAnalyzeService {
         //AI 응답 결과를 각각의 엔티티에 저장
         // 1. StoryCharacter 저장
         StoryCharacter character = StoryCharacter.builder()
-                .category(Category.valueOf(aiResponse.getTheme()))
+                .category(Category.fromLabel(aiResponse.getTheme()))
                 .imageUrl(aiResponse.getImage_url())
+
                 .build();
         characterRepository.save(character);
         //Character 이름 수정 -> Why? : java.lang.Character 와의 충돌 때문
 
-        // 2. Mission 저장 + Character와 연관
-        Mission mission = Mission.builder()
-                .movie(aiResponse.getMovie())
-                .mission(aiResponse.getMission())
-                .effect(aiResponse.getEffect())
-                .storyCharacter(character)  // 캐릭터 연결
-                .build();
-        missionRepository.save(mission);
-
-        // 3. Point 저장
+        // 2. Point 저장
         Point point = Point.builder()
                 .message(aiResponse.getPoint_message())
                 .cost(aiResponse.getPoint())
+                .userId(user.getId())
                 .build();
         pointRepository.save(point);
+
+        // 3. Mission 저장 + Character와 연관
+        Mission mission = Mission.builder()
+                .movie(aiResponse.getMovie())
+                .mission(aiResponse.getMission())
+                .missionStatus(MissionStatus.AVAILABLE)
+                .effect(aiResponse.getEffect())
+                .storyCharacter(character)  // 캐릭터 연결
+                .movieRecord(movieRecord)
+                .point(point)
+                .build();
+        missionRepository.save(mission);
+
+        MyMission myMission = MyMission.builder()
+                .user(user)
+                .mission(mission)
+                .build();
+        myMissionRepository.save(myMission);
+
+        CollectingCharacters collectingRecord = CollectingCharacters.builder()
+                .user(user)
+                .storyCharacter(character)
+                .build();
+        collectingCharactersRepository.save(collectingRecord);
+
 
         return AiTaskDto.ResponseFromAi.builder()
                 .movie(aiResponse.getMovie())

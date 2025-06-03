@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,33 +22,59 @@ public class MyPageController {
 
     private final CollectingCharactersService collectingCharactersService;
     private final UserService userService;
+    private final UserRepository userRepository;
 
     @GetMapping
-    @PreAuthorize("isAuthenticated()")                    // 인증된 사용자만 접근
-    public ResponseEntity<UserDto.MyPageResponseDto> myPage(@AuthenticationPrincipal User principal){
-        if(principal == null){
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<UserDto.MyPageResponseDto> myPage(Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        UserDto.MyPageResponseDto response = userService.getMyPage(principal.getId());
+
+        // TokenProvider에서 넣은 principal은 org.springframework.security.core.userdetails.User
+        String email = authentication.getName(); // = claims.getSubject()
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("유저를 찾을 수 없습니다."));
+
+        UserDto.MyPageResponseDto response = userService.getMyPage(user.getId());
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/collection-status")
-    public ResponseEntity<CollectingDto> myCharacters(
-            @AuthenticationPrincipal User principal){
 
-        Long userId = principal.getId();
+    @GetMapping("/collection-status")
+    public ResponseEntity<CollectingDto> myCharacters(Authentication authentication) {
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        String email = authentication.getName(); // subject에 해당하는 email
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("유저를 찾을 수 없습니다."));
+
+        Long userId = user.getId();
         CollectingDto list = collectingCharactersService.getMyCharacters(userId);
         return ResponseEntity.ok(list);
     }
 
+
     @PatchMapping("/nickname")
     public ResponseEntity<String> getNickName(
-            @AuthenticationPrincipal User principal,
-            @RequestBody @Valid UserDto.NickNameUpdateDto request){
-        userService.updateNickname(principal.getId(), request.getNickname());
+            Authentication authentication,
+            @RequestBody @Valid UserDto.NickNameUpdateDto request) {
 
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("인증이 필요합니다.");
+        }
+
+        String email = authentication.getName();
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("유저를 찾을 수 없습니다."));
+
+        userService.updateNickname(user.getId(), request.getNickname());
         return ResponseEntity.ok("닉네임이 수정되었습니다.");
     }
+
 
 }

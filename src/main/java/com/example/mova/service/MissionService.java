@@ -1,19 +1,24 @@
 package com.example.mova.service;
 
 import com.example.mova.domain.Mission;
+import com.example.mova.domain.MyMission;
 import com.example.mova.dto.MissionDto;
 import com.example.mova.dto.MyMissionDto;
 import com.example.mova.errorhandler.ApiExceptions;
 import com.example.mova.repository.MissionRepository;
+import com.example.mova.repository.MyMissionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class MissionService {
 
     private final MissionRepository missionRepository;
+    private final MyMissionRepository myMissionRepository;
     //AI 미션 조회하는 서비스 구현 코드
+    @Transactional
     public MissionDto.AiMissionInquire findAiMission(long movieRecordId) {
         Mission mission = missionRepository
                 .findByMovieRecordId(movieRecordId)
@@ -22,11 +27,12 @@ public class MissionService {
         return new MissionDto.AiMissionInquire(
                 mission.getMission(),
                 mission.getCost(),
-                mission.getStoryCharacter().getImageUrl()
+                mission.getCharacter()
         );
     }
 
     //AI 미션 상태를 완료로 변환하는 코드
+    @Transactional
     public void changeStatus(
             long movieRecordId,
             long missionId,
@@ -37,5 +43,10 @@ public class MissionService {
 
         mission.update(request.getMissionStatus());
 
+        MyMission myMission = MyMission.builder()
+                .mission(mission)
+                .build();
+
+        myMissionRepository.save(myMission);
     }
 }

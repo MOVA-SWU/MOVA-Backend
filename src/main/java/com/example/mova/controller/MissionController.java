@@ -24,8 +24,8 @@ public class MissionController {
 
     @PatchMapping("/{missionId}/complete")
     public ResponseEntity<String> completeMission(
-            @PathVariable Long movieRecordId, @PathVariable Long myissionId, @RequestBody MyMissionDto.myMissionStatusChangeDto request){
-        missionService.changeStatus(movieRecordId, myissionId, request);
+            @PathVariable Long movieRecordId, @PathVariable Long missionId, @RequestBody MyMissionDto.myMissionStatusChangeDto request){
+        missionService.changeStatus(movieRecordId, missionId, request);
         return ResponseEntity
                 .ok("미션을 수행하셨습니다."); //반환을 메세지로 함.
     }

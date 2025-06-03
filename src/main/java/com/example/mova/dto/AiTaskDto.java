@@ -1,6 +1,8 @@
 package com.example.mova.dto;
 
+import com.example.mova.enums.Category;
 import com.example.mova.enums.MissionStatus;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 public class AiTaskDto {
@@ -16,6 +18,7 @@ public class AiTaskDto {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
+    @JsonIgnoreProperties(ignoreUnknown = true) //모르는 필드 무시하기
     public static class ResponseFromAi{
         private String movie;
         private String mission;

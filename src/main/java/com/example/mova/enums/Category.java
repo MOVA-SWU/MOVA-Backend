@@ -29,8 +29,9 @@ public enum Category {
     //JSON 표현 -> 객체 (역직렬화)
     @JsonCreator
     public static Category fromLabel(String label){
+        System.out.println("받은 theme label: '" + label + "'");
         for (Category category : values()){
-            if (category.label.equals(label)){
+            if (category.label.equals(label.trim())){  // 공백 방지
                 return category;
             }
         }

@@ -52,6 +52,10 @@ public class Mission extends BaseEntity{
         return this.point.getCost();
     }
 
+    public String getCharacter(){
+        return this.storyCharacter.getImageUrl();
+    }
+
     public void update(MissionStatus status){
         this.missionStatus = status;
     }

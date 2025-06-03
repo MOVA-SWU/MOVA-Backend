@@ -50,10 +50,10 @@ public class UserController {
         return "로그아웃 성공";
     }
 
+
+
     @GetMapping("/{userId}/pointSum")
     public ResponseEntity<PointSumDto> getPointSum(@PathVariable Long userId){
         return ResponseEntity.ok(pointService.getPointSum(userId));
     }
-
-
 }

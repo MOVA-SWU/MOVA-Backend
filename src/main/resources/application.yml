@@ -13,14 +13,12 @@ spring:
     open-in-view: false
     show-sql: true
     hibernate:
-        ddl-auto: create
+        ddl-auto: update
 
 jwt:
-  secret: 4418607030a3ec9c5821253b158042e8b241d6b46830325eaa4d8246b423e3e6
+  secret: ${SECRET}
+  #4418607030a3ec9c5821253b158042e8b241d6b46830325eaa4d8246b423e3e6
 
-
-ai:
-  api: AIzaSyBVBoQRbb1nWOYlL9srcFH4swLInwOToRU
 
 logging:
   level:
