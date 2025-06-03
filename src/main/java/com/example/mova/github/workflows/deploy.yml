@@ -45,4 +45,5 @@ jobs:
             --platform managed \
             --region asia-northeast3 \
             --allow-unauthenticated \
-            --set-env-vars "DB_PASSWORD=${{ secrets.DB_PASSWORD }},SECRET=${{ secrets.SECRET }}"
+            --set-env-vars "DB_PASSWORD=${{ secrets.DB_PASSWORD }},SECRET=${{ secrets.SECRET }}" \
+            --add-cloudsql-instances analytical-poet-461806-t7:asia-northeast3:root
