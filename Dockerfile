@@ -1,11 +1,11 @@
-FROM eclipse-temurin:21-jdk as builder
+FROM eclipse-temurin:17-jdk as builder
 
 WORKDIR /app
 COPY . .
 RUN chmod +x ./gradlew
 RUN ./gradlew build -x test --no-daemon
 
-FROM eclipse-temurin:21-jdk
+FROM eclipse-temurin:17-jdk
 
 EXPOSE 8080
 
