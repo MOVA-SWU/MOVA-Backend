@@ -5,7 +5,7 @@ COPY . .
 RUN chmod +x ./gradlew
 RUN ./gradlew build -x test --no-daemon
 
-FROM eclipse-temurin:17-jdk
+FROM eclipse-temurin:17-jre-alpine
 
 EXPOSE 8080
 
