@@ -7,17 +7,14 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface MyMissionRepository extends JpaRepository<MyMission, Long> {
-    List<MyMission> findAllByMission_MissionStatus(MissionStatus missionStatus);
 
-    //Optional<MyMission> findByMission_Id(Long missionId);
-    @Query("""
-        SELECT m
-          FROM MyMission m
-          JOIN m.mission ms
-         WHERE ms.missionStatus = :status
-        """)
-    List<MyMission> findAllByMissionStatusJPQL(@Param("status") MissionStatus status);
+    Optional<MyMission> findByMission_MissionId(Long missionId);
+
+    List<MyMission> findAllByMission_MissionStatus(MissionStatus status);
+
+
 
 }
