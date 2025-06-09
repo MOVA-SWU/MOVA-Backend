@@ -4,6 +4,7 @@ import com.example.mova.dto.SupportDto;
 import com.example.mova.service.SupportService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,5 +29,10 @@ public class SupportController {
         return ResponseEntity.ok(supportCompany);
     }
 
+    @PutMapping("/{supportId}/sponsor")
+    public ResponseEntity<String > getStatusChange(@PathVariable Long supportId){
+        String message =supportService.changeStatus(supportId);
+        return ResponseEntity.ok(message);
+    }
 
 }

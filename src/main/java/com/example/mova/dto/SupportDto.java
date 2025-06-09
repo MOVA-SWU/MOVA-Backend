@@ -34,9 +34,8 @@ public class SupportDto {
     //후원하기
     @Getter
     @Setter
-    private static class SupportRequestDto{
+    public static class SupportRequestDto{
         private Boolean supportStatus;
-
     }
 
 
