@@ -79,15 +79,15 @@ public class AiClient {
         포인트 메시지는 '미션을 하면 몇 포인트를 드려요!' 형식으로, 포인트 수는 10단위로 추천해주세요.
         포인트는 포인트 메시지에서 사용된 숫자만 보내주세요.
         이미지 URL은 주제에 따라 상응하는 이미지 URL을 전달해주세요.
-        평화: https://github.com/user-attachments/assets/3c31966f-1ff7-4de0-929d-fe869c83be0f
-        인권: https://github.com/user-attachments/assets/e45f20e9-af0e-4884-9eec-424a71dd433b
-        빈곤: https://github.com/user-attachments/assets/1df3c0de-8d2e-4872-a27b-44f770602918
-        교육: https://github.com/user-attachments/assets/b7db40e1-94da-4309-ad1e-dc9ae2d9ab12
-        환경: https://github.com/user-attachments/assets/56a8c740-67ea-4365-81d5-c2ed5d3bb6a1
-        과학: https://github.com/user-attachments/assets/632def32-0fcc-4314-99f9-8671cfc239f0
-        건강: https://github.com/user-attachments/assets/769f537f-bede-462d-9710-9b2b5ac66b0e
-        공동체: https://github.com/user-attachments/assets/dce27d74-7ed1-4fed-8e1c-2303d4794ec4
-        윤리: https://github.com/user-attachments/assets/61fe198b-cdb3-4c0c-87c8-17f5be58dbc5
+        평화: https://drive.google.com/file/d/1b_xCYZeMarKmcqU7kezbWsiOqCtxvenC/view?usp=drive_link
+        인권: https://drive.google.com/file/d/16vULjbO7pjQfUYFY7Aogp1R4x63JQ9mu/view?usp=drive_link
+        빈곤: https://drive.google.com/file/d/1nvgBuLf99E04GSGihPsNp8rR43R1WcTe/view?usp=drive_link
+        교육: https://drive.google.com/file/d/1rwuntDJzo9uaY4HmByGhyQIGkyPcbPWW/view?usp=drive_link
+        환경: https://drive.google.com/file/d/10AtPOn7R9W7j_20citkcXtL21sZJUAAh/view?usp=drive_link
+        과학: https://drive.google.com/file/d/1LOc_hbwHWL17iuQj3fLx4dIVYJaKiApl/view?usp=drive_link
+        건강: https://drive.google.com/file/d/1bOq3t5tzuek5hEmwpknHie-CQclPgx9m/view?usp=drive_link
+        공동체: https://drive.google.com/file/d/1fBKBbcV9HtCPnNUWDm32hxU2CqT07hVz/view?usp=drive_link
+        윤리: https://drive.google.com/file/d/1mj012Ij20mCR0fPFWTDs4Dj1wUanhGkB/view?usp=drive_link
 
         아래 JSON 예시처럼 반환해주세요:
         {
