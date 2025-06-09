@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -21,6 +20,8 @@ import java.util.Date;
 public class TokenProvider {
 
     private final Key key;
+    private final long ACCESS_TOKEN_VALIDITY = 24 * 60 * 60 * 1000L;   // 1일
+    private final long REFRESH_TOKEN_VALIDITY = 7 * 24 * 60 * 60 * 1000L; // 7일
 
     public TokenProvider(@Value("${jwt.secret}") String secretKey) {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
@@ -29,19 +30,22 @@ public class TokenProvider {
 
     // User 정보를 가지고 AccessToken, RefreshToken 생성
     public JwtToken generateToken(Authentication authentication) {
-        long now = (new Date()).getTime();
+        String username = authentication.getName();
+        long now = System.currentTimeMillis();
 
-        // Access Token 생성
-        Date accessTokenExpiresIn = new Date(now + 86400000); // 1일
+        // 1) Access Token
+        Date atExpiry = new Date(now + ACCESS_TOKEN_VALIDITY);
         String accessToken = Jwts.builder()
-                .setSubject(authentication.getName()) // username만 넣음
-                .setExpiration(accessTokenExpiresIn)
+                .setSubject(username)
+                .setExpiration(atExpiry)
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
 
-        // Refresh Token 생성
+        // 2) Refresh Token (username 클레임 포함, 만료기간 분리)
+        Date rtExpiry = new Date(now + REFRESH_TOKEN_VALIDITY);
         String refreshToken = Jwts.builder()
-                .setExpiration(new Date(now + 86400000)) // 1일
+                .setSubject(username)
+                .setExpiration(rtExpiry)
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
 
@@ -52,17 +56,23 @@ public class TokenProvider {
                 .build();
     }
 
-    // 토큰으로부터 인증 정보 가져오기
-    public Authentication getAuthentication(String accessToken) {
-        Claims claims = parseClaims(accessToken);
+    // Refresh 엔드포인트에서 username 꺼낼 때 사용
+    public String getUsernameFromToken(String token) {
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+        return claims.getSubject();
+    }
 
-        UserDetails principal = new User(
-                claims.getSubject(),  // username
-                "",                  // password (필요 없음)
-                Collections.emptyList() // 권한 없이
-        );
-
-        return new UsernamePasswordAuthenticationToken(principal, "", Collections.emptyList());
+    public Authentication getAuthentication(String token) {
+        // 토큰에서 subject(username) 꺼내기
+        String username = getUsernameFromToken(token);
+        // UserDetails 대신 간단히 Spring Security User객체 생성
+        User principal = new User(username, "", Collections.emptyList());
+        // UsernamePasswordAuthenticationToken의 두번째 인자는 credentials, 세번째는 권한 리스트
+        return new UsernamePasswordAuthenticationToken(principal, token, Collections.emptyList());
     }
 
     // 토큰 유효성 검증

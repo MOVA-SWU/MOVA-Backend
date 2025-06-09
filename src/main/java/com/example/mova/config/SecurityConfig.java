@@ -37,7 +37,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션 사용 안 함
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/users/signup", "/users/login", "users/emailCheck").permitAll()
+                        .requestMatchers("/users/signup", "/users/login", "users/emailCheck", "/auth/refresh").permitAll()
                         .anyRequest().authenticated())  // 인증이 필요한 나머지 요청
                 .addFilterBefore(new JwtAuthenticationFilter(tokenProvider),
                         UsernamePasswordAuthenticationFilter.class)
