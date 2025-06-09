@@ -11,7 +11,7 @@ public enum Category {
     ENVIRONMENT("환경"),
     SCIENCE("과학"),
     HEALTH("건강"),
-    COMMUNITY("커뮤니티"),
+    COMMUNITY("공동체"),
     ETHICS("윤리");
 
     private final String label;
