@@ -37,7 +37,7 @@ public class SupportService {
 
     @Transactional
     public SupportDto.CompanySupportDto findCompany(Long supportId){
-        Support support = supportRepository.findById(supportId)
+        Support support = supportRepository.findByIdWithCompany(supportId)
                 .orElseThrow(() -> new IllegalArgumentException(
                         "해당 아이디를 찾을 수 없습니다. id=" + supportId));
 
