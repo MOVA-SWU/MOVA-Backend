@@ -24,7 +24,7 @@ public class SupportController {
 
     @GetMapping("/{supportId}")
     public ResponseEntity<SupportDto.CompanySupportDto> getCompanyDetail(@Valid @PathVariable Long supportId){
-        SupportDto.CompanySupportDto supportCompany = supportService.findCompnay(supportId);
+        SupportDto.CompanySupportDto supportCompany = supportService.findCompany(supportId);
         return ResponseEntity.ok(supportCompany);
     }
 
