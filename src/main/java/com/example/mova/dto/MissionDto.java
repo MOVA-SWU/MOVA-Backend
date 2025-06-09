@@ -1,5 +1,6 @@
 package com.example.mova.dto;
 
+import com.example.mova.enums.MissionStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,9 +13,10 @@ public class MissionDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class AiMissionInquire{
-        //private Long myMissionId;
+        private Long missionId;
         private String mission;
         private Integer cost;
         private String characterImage;
+        private MissionStatus missionStatus;
     }
 }

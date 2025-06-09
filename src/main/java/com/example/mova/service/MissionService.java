@@ -24,9 +24,11 @@ public class MissionService {
                 .orElseThrow(() -> new ApiExceptions.MovieRecordNotFoundException(movieRecordId));
 
         return new MissionDto.AiMissionInquire(
+                mission.getMissionId(),
                 mission.getMission(),
                 mission.getCost(),
-                mission.getCharacter()
+                mission.getCharacter(),
+                mission.getMissionStatus()
         );
     }
 
