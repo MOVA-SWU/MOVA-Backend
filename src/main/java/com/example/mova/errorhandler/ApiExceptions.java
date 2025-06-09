@@ -18,4 +18,11 @@ public class ApiExceptions {
             super("해당 미션을 찾을 수 없습니다. myMissionId = " + myMissionId);
         }
     }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public static class InsufficientPointsException extends RuntimeException {
+        public InsufficientPointsException(String message) {
+            super(message);
+        }
+    }
 }
