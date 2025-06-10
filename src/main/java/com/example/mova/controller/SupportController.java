@@ -12,27 +12,14 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/supports")
 public class SupportController {
 
     private final SupportService supportService;
 
-    @GetMapping
-    public ResponseEntity<List<SupportDto.CompanyListDto>> getCompanyList(){
-        List<SupportDto.CompanyListDto> companyList = supportService.findList();
-        return ResponseEntity.ok(companyList);
-    }
-
-    @GetMapping("/{supportId}")
-    public ResponseEntity<SupportDto.CompanySupportDto> getCompanyDetail(@Valid @PathVariable Long supportId){
-        SupportDto.CompanySupportDto supportCompany = supportService.findCompany(supportId);
-        return ResponseEntity.ok(supportCompany);
-    }
-
-    @PutMapping("/{supportId}/sponsor")
-    public ResponseEntity<String > getStatusChange(@PathVariable Long supportId){
-        String message =supportService.changeStatus(supportId);
-        return ResponseEntity.ok(message);
+    @PostMapping("/companies/{companyId}/sponsor")
+    public ResponseEntity<String > getStatusChange(@PathVariable Long companyId){
+        String message =supportService.changeStatus(companyId);
+        return ResponseEntity.status(HttpStatus.CREATED).body(message);
     }
 
 }
