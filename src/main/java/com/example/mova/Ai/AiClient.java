@@ -79,15 +79,15 @@ public class AiClient {
         포인트 메시지는 '미션을 하면 몇 포인트를 드려요!' 형식으로, 포인트 수는 10단위로 추천해주세요.
         포인트는 포인트 메시지에서 사용된 숫자만 보내주세요.
         이미지 URL은 주제에 따라 상응하는 이미지 URL을 전달해주세요.
-        평화: https://drive.google.com/file/d/1b_xCYZeMarKmcqU7kezbWsiOqCtxvenC/view?usp=drive_link
-        인권: https://drive.google.com/file/d/16vULjbO7pjQfUYFY7Aogp1R4x63JQ9mu/view?usp=drive_link
-        빈곤: https://drive.google.com/file/d/1nvgBuLf99E04GSGihPsNp8rR43R1WcTe/view?usp=drive_link
-        교육: https://drive.google.com/file/d/1rwuntDJzo9uaY4HmByGhyQIGkyPcbPWW/view?usp=drive_link
-        환경: https://drive.google.com/file/d/10AtPOn7R9W7j_20citkcXtL21sZJUAAh/view?usp=drive_link
-        과학: https://drive.google.com/file/d/1LOc_hbwHWL17iuQj3fLx4dIVYJaKiApl/view?usp=drive_link
-        건강: https://drive.google.com/file/d/1bOq3t5tzuek5hEmwpknHie-CQclPgx9m/view?usp=drive_link
-        공동체: https://drive.google.com/file/d/1fBKBbcV9HtCPnNUWDm32hxU2CqT07hVz/view?usp=drive_link
-        윤리: https://drive.google.com/file/d/1mj012Ij20mCR0fPFWTDs4Dj1wUanhGkB/view?usp=drive_link
+        평화: https://drive.google.com/uc?export=download&id=1b_xCYZeMarKmcqU7kezbWsiOqCtxvenC
+        인권: https://drive.google.com/uc?export=download&id=16vULjbO7pjQfUYFY7Aogp1R4x63JQ9mu
+        빈곤: https://drive.google.com/uc?export=download&id=1nvgBuLf99E04GSGihPsNp8rR43R1WcTe
+        교육: https://drive.google.com/uc?export=download&id=1rwuntDJzo9uaY4HmByGhyQIGkyPcbPWW
+        환경: https://drive.google.com/uc?export=download&id=10AtPOn7R9W7j_20citkcXtL21sZJUAAh
+        과학: https://drive.google.com/uc?export=download&id=1LOc_hbwHWL17iuQj3fLx4dIVYJaKiApl
+        건강: https://drive.google.com/uc?export=download&id=1bOq3t5tzuek5hEmwpknHie-CQclPgx9m
+        공동체: https://drive.google.com/uc?export=download&id=1fBKBbcV9HtCPnNUWDm32hxU2CqT07hVz
+        윤리: https://drive.google.com/uc?export=download&id=1mj012Ij20mCR0fPFWTDs4Dj1wUanhGkB
 
         아래 JSON 예시처럼 반환해주세요:
         {
@@ -97,7 +97,7 @@ public class AiClient {
           "point_message": "미션을 하면 100포인트를 드려요!",
           "point": 100,
           "theme": "환경",
-          "image_url": "https://github.com/user-attachments/assets/56a8c740-67ea-4365-81d5-c2ed5d3bb6a1"
+          "image_url": "https://drive.google.com/uc?export=download&id=10AtPOn7R9W7j_20citkcXtL21sZJUAAh"
         }
         """.formatted(title);
     }
