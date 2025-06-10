@@ -60,4 +60,5 @@ public class Mission extends BaseEntity{
         this.missionStatus = status;
     }
 
+
 }

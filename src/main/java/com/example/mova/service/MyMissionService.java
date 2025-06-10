@@ -23,6 +23,7 @@ public class MyMissionService {
         return entities.stream()
                 .map(m -> MyMissionDto.myMissionResponseDto.builder()
                         .myMissionId(m.getMyMissionId())
+                        .movieRecordId( m.getMission().getMovieRecord().getId())
                         .mission(m.getMission().getMission())
                         .cost(m.getMission().getCost())
                         .build()

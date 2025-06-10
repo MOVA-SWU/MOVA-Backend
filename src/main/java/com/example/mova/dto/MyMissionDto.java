@@ -13,6 +13,7 @@ public class MyMissionDto {
     @AllArgsConstructor
     public static class myMissionResponseDto{
         private Long myMissionId;
+        private Long movieRecordId;
         private String mission;
         private Integer cost;
 
