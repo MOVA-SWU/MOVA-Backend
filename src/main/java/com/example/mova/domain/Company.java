@@ -1,6 +1,8 @@
 package com.example.mova.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -25,6 +27,11 @@ public class Company extends BaseEntity{
     private String explainText;
 
     private String bannerImage;
+
+    @Column(nullable = false)
+    @Min(5000)
+    @Max(1000000)
+    private Integer supportCost;
 
     @ElementCollection
     @CollectionTable(name = "company_production_images",
