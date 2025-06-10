@@ -23,11 +23,6 @@ public class Support extends BaseEntity{
     @Column(nullable = false)
     private Boolean supportStatus;
 
-    @Column(nullable = false)
-    @Min(5000)
-    @Max(1000000)
-    private Integer supportCost;
-
     private LocalDateTime requestDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -37,21 +32,5 @@ public class Support extends BaseEntity{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
-
-    public String getCompanyName(){
-        return this.company.getName();
-    }
-
-    public String getBannerImage(){
-        return this.company.getBannerImage();
-    }
-
-    public List<String> getImages(){
-        return this.company.getProductionImages();
-    }
-
-    public String getExplain(){
-        return this.company.getExplainText();
-    }
 
 }
