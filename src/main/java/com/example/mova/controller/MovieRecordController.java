@@ -1,8 +1,10 @@
 package com.example.mova.controller;
 
 import com.example.mova.config.JWTUtil;
+import com.example.mova.domain.User;
 import com.example.mova.dto.AiTaskDto;
 import com.example.mova.dto.MovieRecordDto;
+import com.example.mova.repository.UserRepository;
 import com.example.mova.service.AiAnalyzeService;
 import com.example.mova.service.MovieRecordService;
 import jakarta.validation.Valid;
@@ -13,47 +15,66 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
-@RequiredArgsConstructor
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/home")
 public class MovieRecordController {
 
     private final MovieRecordService movieRecordService;
     private final AiAnalyzeService aiAnalyzeService;
+    private final UserRepository userRepository;
 
-    //홈화면의 영화 리스트 보여줌
+    // 홈화면의 영화 리스트
     @GetMapping
-    public ResponseEntity<List<MovieRecordDto.MovieListResponseDto>> findMovieList(){
-        List<MovieRecordDto.MovieListResponseDto> list = movieRecordService.findMovieList();
+    public ResponseEntity<List<MovieRecordDto.MovieListResponseDto>> findMovieList() {
+        Long userId = getCurrentUserId();
+        List<MovieRecordDto.MovieListResponseDto> list =
+                movieRecordService.findMovieList(userId);
         return ResponseEntity.ok(list);
     }
 
-    //영화홈화면에 최신기록 보여주는 페이지
+    // 영화홈화면에 최신기록 보여주는 페이지
     @GetMapping("/latest")
-    public ResponseEntity<List<MovieRecordDto.MovieLatestResponseDto>> findMovieLatest(){
-        List<MovieRecordDto.MovieLatestResponseDto> latestList = movieRecordService.findLatest();
+    public ResponseEntity<List<MovieRecordDto.MovieLatestResponseDto>> findMovieLatest() {
+        Long userId = getCurrentUserId();
+        List<MovieRecordDto.MovieLatestResponseDto> latestList =
+                movieRecordService.findLatest(userId);
         return ResponseEntity.ok(latestList);
     }
 
-    //영화기록 작성 페이지
+    // 영화 기록 작성
     @PostMapping("/movies")
-    public ResponseEntity<AiTaskDto.ResponseFromAi> addMovieRecord(@Valid @RequestBody MovieRecordDto.MovieRecordRequestDto request){
+    public ResponseEntity<AiTaskDto.ResponseFromAi> addMovieRecord(
+            @Valid @RequestBody MovieRecordDto.MovieRecordRequestDto request) {
 
-        //현재 로그인한 사용자 이메일 꺼내기
-        String email = JWTUtil.getCurrentUsername();
+        Long userId = getCurrentUserId();
+        AiTaskDto.ResponseFromAi response =
+                aiAnalyzeService.analyzeAndSaveMovieRecord(request, userId);
 
-        AiTaskDto.ResponseFromAi response = aiAnalyzeService.analyzeAndSaveMovieRecord(request, email);
-        //201 created 응답
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(response);
     }
 
-    //영화기록한 내용 조회페이지
     @GetMapping("/movie-records/{movieRecordId}")
-    public ResponseEntity<MovieRecordDto.MoiveRecordResponseDto> findMovieRecord(@PathVariable Long movieRecordId) {
-        MovieRecordDto.MoiveRecordResponseDto movieResponses = movieRecordService.findMovieRecord(movieRecordId);
-        return ResponseEntity.ok().body(movieResponses);
+    public ResponseEntity<MovieRecordDto.MoiveRecordResponseDto> findMovieRecord(
+            @PathVariable Long movieRecordId) {
+
+        Long userId = getCurrentUserId();
+        MovieRecordDto.MoiveRecordResponseDto dto =
+                movieRecordService.findMovieRecord(movieRecordId, userId);
+
+        return ResponseEntity.ok(dto);
+    }
+
+    // —————————————
+    // JWTUtil로 email 추출 → UserRepository로 User 조회 → ID 반환
+    private Long getCurrentUserId() {
+        String email = JWTUtil.getCurrentUsername();
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() ->
+                        new IllegalArgumentException("사용자를 찾을 수 없습니다. email=" + email)
+                );
+        return user.getId();
     }
 }

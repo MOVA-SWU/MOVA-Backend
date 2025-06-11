@@ -34,7 +34,7 @@ public class SupportService {
         Company company = companyRepository.findById(companyId)
                 .orElseThrow(()-> new IllegalArgumentException("해당 후원사를 찾을 수 없습니다. id =" + companyId));
 
-        int availablePoints = pointRepository.sumCostByUserIdAndMissionStatus(
+        int availablePoints = pointRepository.sumCostByUserIdAndStatus(
                 user.getId(), MissionStatus.COMPLETED
         );
 

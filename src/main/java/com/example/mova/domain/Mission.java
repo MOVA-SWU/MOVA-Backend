@@ -29,10 +29,6 @@ public class Mission extends BaseEntity{
     @Column(nullable = false, columnDefinition = "TEXT")
     private String effect;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false, columnDefinition = "VARCHAR(20) DEFAULT 'AVAILABLE'")
-    private MissionStatus missionStatus;
-
     @OneToMany(mappedBy = "mission", cascade = CascadeType.ALL)
     private List<MyMission> myMissionList = new ArrayList<>();
 
@@ -54,10 +50,6 @@ public class Mission extends BaseEntity{
 
     public String getCharacter(){
         return this.storyCharacter.getImageUrl();
-    }
-
-    public void update(MissionStatus status){
-        this.missionStatus = status;
     }
 
 

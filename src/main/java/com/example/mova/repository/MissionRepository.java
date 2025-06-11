@@ -12,5 +12,4 @@ public interface MissionRepository extends JpaRepository<Mission, Long> {
     Optional<Mission> findByMovieRecordId(Long movieRecordId);
     Optional<Mission> findByMissionIdAndMovieRecordId(Long movieRecordId, Long missionId);
 
-    List<Mission> findByMissionStatus(MissionStatus status);
 }

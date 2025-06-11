@@ -12,14 +12,15 @@ public interface PointRepository extends JpaRepository<Point, Long> {
 
     @Query("""
         SELECT COALESCE(SUM(p.cost), 0)
-          FROM Mission m
+          FROM MyMission mm
+          JOIN mm.mission m
           JOIN m.point p
-         WHERE p.userId = :userId
-           AND m.missionStatus = :status
+         WHERE mm.user.id = :userId
+           AND mm.missionStatus = :status
         """)
-    int sumCostByUserIdAndMissionStatus(
+    int sumCostByUserIdAndStatus(
             @Param("userId") Long userId,
-            @Param("status") MissionStatus status
+            @Param("status")   MissionStatus status
     );
 
 }

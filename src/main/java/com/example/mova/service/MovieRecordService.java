@@ -21,9 +21,9 @@ public class MovieRecordService {
     private final UserRepository userRepository;
 
     //홈화면 목록 조회
-    public List<MovieRecordDto.MovieListResponseDto> findMovieList(){
+    public List<MovieRecordDto.MovieListResponseDto> findMovieList(Long userId){
         //List<MovieRecord> movieList = movieRecordRepository.findAll();
-        return movieRecordRepository.findAll().stream()
+        return movieRecordRepository.findAllByUser_Id(userId) .stream()
                 .map(movie -> MovieRecordDto.MovieListResponseDto.builder()
                         .movieId(movie.getId())
                         .imageUrl(movie.getImageUrl())
@@ -32,8 +32,8 @@ public class MovieRecordService {
     }
 
     //홈화면에 최신 기록 두 건 조회
-    public List<MovieRecordDto.MovieLatestResponseDto> findLatest(){
-        return movieRecordRepository.findTop2ByOrderByCreatedAtDesc().stream()
+    public List<MovieRecordDto.MovieLatestResponseDto> findLatest(Long userId){
+        return movieRecordRepository.findTop2ByUser_IdOrderByCreatedAtDesc(userId).stream()
                 .map(movieRecord -> MovieRecordDto.MovieLatestResponseDto.builder()
                         .movieId(movieRecord.getId())
                         .imageUrl(movieRecord.getImageUrl())
@@ -77,8 +77,8 @@ public class MovieRecordService {
                 .build();
     }
 
-    public MovieRecordDto.MoiveRecordResponseDto findMovieRecord(long movieRecordId){
-        MovieRecord movieRecord = movieRecordRepository.findById(movieRecordId)
+    public MovieRecordDto.MoiveRecordResponseDto findMovieRecord(long movieRecordId, Long userId){
+        MovieRecord movieRecord = movieRecordRepository.findByIdAndUser_Id(movieRecordId, userId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 글을 찾을 수 없습니다."));
 
         return MovieRecordDto.MoiveRecordResponseDto.builder()

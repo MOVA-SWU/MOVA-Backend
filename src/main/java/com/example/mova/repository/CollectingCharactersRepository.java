@@ -16,12 +16,13 @@ public interface CollectingCharactersRepository extends JpaRepository<Collecting
           FROM CollectingCharacters cc
           JOIN cc.storyCharacter sc
           JOIN sc.missionList m
+          JOIN m.myMissionList mm
          WHERE cc.user.id = :userId
-           AND m.movieRecord.user.id = :userId
-           AND m.missionStatus = :status
+           AND mm.user.id = :userId
+           AND mm.missionStatus = :status
         """)
     List<String> findImageUrlsByUserIdAndStatus(
             @Param("userId") Long userId,
-            @Param("status") MissionStatus status
+            @Param("status")   MissionStatus status
     );
 }

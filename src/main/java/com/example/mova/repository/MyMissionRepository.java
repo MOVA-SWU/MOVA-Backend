@@ -10,11 +10,12 @@ import java.util.List;
 import java.util.Optional;
 
 public interface MyMissionRepository extends JpaRepository<MyMission, Long> {
+    Optional<MyMission> findByMyMissionIdAndUser_IdAndMission_MovieRecord_Id(
+            Long myMissionId, Long userId, Long movieRecordId
+    );
 
-    Optional<MyMission> findByMission_MissionId(Long missionId);
+    List<MyMission> findAllByUser_IdAndMissionStatus(Long userId, MissionStatus status);
 
-    List<MyMission> findAllByMission_MissionStatus(MissionStatus status);
-
-
+    Optional<MyMission> findByUser_IdAndMission_MissionId(Long userId, Long missionId);
 
 }

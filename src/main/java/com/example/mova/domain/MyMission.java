@@ -15,6 +15,10 @@ public class MyMission extends BaseEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long myMissionId;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, columnDefinition = "VARCHAR(20) DEFAULT 'AVAILABLE'")
+    private MissionStatus missionStatus;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
@@ -22,6 +26,10 @@ public class MyMission extends BaseEntity{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mission_id")
     private Mission mission;
+
+    public void updateStatus(MissionStatus status) {
+        this.missionStatus = status;
+    }
 
 
 }

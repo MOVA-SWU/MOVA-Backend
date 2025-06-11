@@ -13,7 +13,7 @@ public class PointService {
     private final PointRepository pointRepository;
 
     public PointSumDto getPointSum(long userId) {
-        int totalCompletedPoints = pointRepository.sumCostByUserIdAndMissionStatus(
+        int totalCompletedPoints = pointRepository.sumCostByUserIdAndStatus(
                 userId,
                 MissionStatus.COMPLETED   // 완료 상태
         );
