@@ -21,7 +21,7 @@ public class AiClient {
     }
 
     public AiTaskDto.ResponseFromAi sendToAi(AiTaskDto.RequestToAi request){
-       String apiKey = "AIzaSyAyD1w1qU2SS0VHvS_LfUk_gxr5_C32BHE";
+       String apiKey = "ghjgjhgjhghgjhghg";
        String url = "https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=" + apiKey;
         // 1. 프롬프트 + 제목 조합
         String prompt = buildPrompt(request.getTitle());
