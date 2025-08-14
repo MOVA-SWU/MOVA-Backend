@@ -13,7 +13,7 @@ public class AiClient {
     }
 
     public AiTaskDto.ResponseFromAi sendToAi(AiTaskDto.RequestToAi request){
-       String api = "AIzaSyBVBoQRbb1nWOYlL9srcFH4swLInwOToRU";
+       String api = "gjhjhgjhfhgfhgfhgfhg";
        return restTemplate.postForObject(api, request, AiTaskDto.ResponseFromAi.class);
     }
 }
