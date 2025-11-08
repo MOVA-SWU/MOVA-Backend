@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Entity
@@ -33,6 +35,9 @@ public class MovieRecord extends BaseEntity{
     @Column(nullable = false, length = 1000)
     private String content;
 
+    @Column(nullable = false)
+    private String checkedUrl; // 검증할 사진 URL 저장
+
     public void update(Double rating, LocalDate dateTime, String content){
         this.rating = rating;
         this.dateTime = dateTime;
@@ -42,6 +47,5 @@ public class MovieRecord extends BaseEntity{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
-
 
 }
