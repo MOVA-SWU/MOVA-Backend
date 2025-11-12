@@ -23,4 +23,11 @@ public class VerificationDto {
 
         private String key;
     }
+
+    @Getter
+    @Builder
+    public static class sendImageFromAI{
+        private String checkedUrl;
+        private String mission;
+    }
 }
