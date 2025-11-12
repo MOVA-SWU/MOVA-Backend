@@ -31,7 +31,8 @@ public class MissionController {
     }
 
 
-    @PatchMapping("/{myMissionId}/complete")
+    //사진 검증 때문에 필요 X
+    /*@PatchMapping("/{myMissionId}/complete")
     public ResponseEntity<String> completeMission(
             @PathVariable Long movieRecordId,
             @PathVariable Long myMissionId) {
@@ -42,4 +43,5 @@ public class MissionController {
         myMissionService.completeMyMission(movieRecordId, myMissionId, user.getId());
         return ResponseEntity.ok("미션을 수행하셨습니다.");
     }
+     */
 }
