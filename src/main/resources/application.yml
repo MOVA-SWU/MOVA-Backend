@@ -38,8 +38,8 @@ jwt:
 
 
 ai:
-  api: AIzaSyBVBoQRbb1nWOYlL9srcFH4swLInwOToRU
-
+  api: 
+  
 logging:
   level:
     # RestTemplate 자체 로그
