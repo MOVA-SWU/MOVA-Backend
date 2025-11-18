@@ -51,7 +51,4 @@ public class UserController {
         return "로그아웃 성공";
     }
 
-
-
-
 }

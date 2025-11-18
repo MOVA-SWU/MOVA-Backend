@@ -3,13 +3,15 @@ package com.example.mova.Ai;
 import com.example.mova.dto.AiTaskDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.Base64;
 
 @Component
 public class AiClient {
@@ -20,13 +22,20 @@ public class AiClient {
         this.restTemplate = new RestTemplate();
     }
 
-    public AiTaskDto.ResponseFromAi sendToAi(AiTaskDto.RequestToAi request){
-       String apiKey = "AIzaSyAyD1w1qU2SS0VHvS_LfUk_gxr5_C32BHE";
-       String url = "https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=" + apiKey;
-        // 1. 프롬프트 + 제목 조합
+    @Value("${ai.api}")
+    private String apiKey;
+
+    @Value("${ai.url}")
+    private String baseUrl;
+
+    /**
+     * 방법 1: 영화 제목으로 미션 생성
+     * 사용 시점: 사용자가 영화를 선택했을 때
+     */
+    public AiTaskDto.ResponseFromAi sendToAi(AiTaskDto.RequestToAi request) {
+        String url = baseUrl + "?key=" + apiKey;
         String prompt = buildPrompt(request.getTitle());
 
-        // 2. 요청 JSON 구성
         String body = """
         {
           "contents": [
@@ -37,17 +46,14 @@ public class AiClient {
             }
           ]
         }
-        """.formatted(prompt.replace("\"", "\\\"")); // 큰따옴표 이스케이프
+        """.formatted(prompt.replace("\"", "\\\""));
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         HttpEntity<String> entity = new HttpEntity<>(body, headers);
-
-        // 3. 요청 전송
         ResponseEntity<String> response = restTemplate.postForEntity(url, entity, String.class);
 
-        // 4. 응답의 text 필드에서 JSON 파싱
         try {
             String aiText = objectMapper.readTree(response.getBody())
                     .path("candidates").get(0)
@@ -60,9 +66,57 @@ public class AiClient {
                     .trim();
 
             return objectMapper.readValue(cleanJson, AiTaskDto.ResponseFromAi.class);
-
         } catch (JsonProcessingException e) {
             throw new RuntimeException("Gemini 응답 파싱 중 오류 발생", e);
+        }
+    }
+
+    /**
+     * 방법 2: 미션 수행 이미지 검증
+     */
+    public AiTaskDto.receiveFromAi verifyMission(AiTaskDto.sendImageFromAi fromAi) {
+        String url = baseUrl + "?key=" + apiKey;
+        String base64Image = downloadAndEncodeImage(fromAi.getUrl());
+        String prompt = buildVerificationPrompt(fromAi.getMission());
+
+        String body = """
+        {
+          "contents": [
+            {
+              "parts": [
+                { "text": "%s" },
+                {
+                  "inline_data": {
+                    "mime_type": "image/jpeg",
+                    "data": "%s"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+        """.formatted(prompt.replace("\"", "\\\""), base64Image);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<String> entity = new HttpEntity<>(body, headers);
+        ResponseEntity<String> response = restTemplate.postForEntity(url, entity, String.class);
+
+        try {
+            String aiText = objectMapper.readTree(response.getBody())
+                    .path("candidates").get(0)
+                    .path("content").path("parts").get(0)
+                    .path("text").asText();
+
+            String cleanJson = aiText
+                    .replace("```json", "")
+                    .replace("```", "")
+                    .trim();
+
+            return objectMapper.readValue(cleanJson, AiTaskDto.receiveFromAi.class);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Gemini 검증 응답 파싱 중 오류 발생", e);
         }
     }
 
@@ -102,5 +156,38 @@ public class AiClient {
         """.formatted(title);
     }
 
+    private String buildVerificationPrompt(String missionDescription) {
+        return """
+        당신은 미션 수행 검증 전문가입니다.
+        사용자가 제시한 미션 내용과 제출한 사진을 분석하여 적합도를 평가합니다.
 
+        다음 미션 내용과 사진을 비교하여 적합도를 평가해주세요.
+
+        [미션 내용]
+        %s
+
+        평가 기준:
+        1. 사진이 미션 내용의 요구사항을 충족하는지 분석
+        2. 적합도를 0-100%% 사이의 숫자로 계산
+        3. 적합도가 50%% 이상이면 "성공", 50%% 미만이면 "실패"로 판정
+
+        반드시 다음 JSON 형식으로만 응답하세요:
+        {
+          "result": "성공"
+        }
+        또는
+        {
+          "result": "실패"
+        }
+        """.formatted(missionDescription);
+    }
+
+    private String downloadAndEncodeImage(String url) {
+        try (InputStream in = new URL(url).openStream()) {
+            byte[] imageBytes = in.readAllBytes();
+            return Base64.getEncoder().encodeToString(imageBytes);
+        } catch (IOException e) {
+            throw new RuntimeException("이미지 다운로드 또는 인코딩 실패", e);
+        }
+    }
 }
