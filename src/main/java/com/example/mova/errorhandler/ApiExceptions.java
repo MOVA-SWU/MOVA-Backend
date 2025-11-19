@@ -25,4 +25,5 @@ public class ApiExceptions {
             super(message);
         }
     }
+
 }
