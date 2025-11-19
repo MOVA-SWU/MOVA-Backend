@@ -4,6 +4,7 @@ import com.example.mova.enums.Category;
 import com.example.mova.enums.MissionStatus;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 public class AiTaskDto {
 
@@ -27,6 +28,25 @@ public class AiTaskDto {
         private Integer point;
         private String theme;
         private String image_url;
+    }
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class sendImageFromAi{
+        private MultipartFile image;
+        private String mission;
+        private String url;
+    }
+
+    @Getter
+    @Setter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class receiveFromAi{
+        private String result;
     }
 
 }
