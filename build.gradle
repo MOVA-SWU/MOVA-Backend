@@ -44,8 +44,7 @@ dependencies {
 	implementation 'com.amazonaws:aws-java-sdk-s3:1.12.767'
 
 	//Google 저장소
-		implementation group: 'org.springframework.cloud', name: 'spring-cloud-gcp-starter', version: '1.2.5.RELEASE'
-		implementation group: 'org.springframework.cloud', name: 'spring-cloud-gcp-storage', version: '1.2.5.RELEASE'
+	implementation 'com.google.cloud:google-cloud-storage:2.40.0'
 }
 
 tasks.named('test') {
