@@ -14,13 +14,15 @@ public class MissionDto {
         private String mission;
         private Integer cost;
         private String characterImage;
+        private String checkedUrl;
         private MissionStatus missionStatus;
 
-        public AiMissionInquire(Long myMissionId, String mission, Integer cost, String characterImage, MissionStatus missionStatus) {
+        public AiMissionInquire(Long myMissionId, String mission, Integer cost, String characterImage, String checkedUrl,MissionStatus missionStatus) {
             this.myMissionId = myMissionId;
             this.mission = mission;
             this.cost = cost;
             this.characterImage = characterImage;
+            this.checkedUrl = checkedUrl;
             this.missionStatus = missionStatus;
         }
     }
