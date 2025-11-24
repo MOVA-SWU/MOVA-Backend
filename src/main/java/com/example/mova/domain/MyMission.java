@@ -19,6 +19,8 @@ public class MyMission extends BaseEntity{
     @Column(nullable = false, columnDefinition = "VARCHAR(20) DEFAULT 'AVAILABLE'")
     private MissionStatus missionStatus;
 
+    private String checkedUrl; // 검증할 사진 URL 저장
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
