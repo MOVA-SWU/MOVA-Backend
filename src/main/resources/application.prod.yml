@@ -1,0 +1,59 @@
+server:
+  port: 8080
+  error:
+    include-message: always
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  thymeleaf:
+    cache: false
+
+  #spring data jpa ??
+  jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
+    open-in-view: false
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 10MB
+      resolve-lazily: true
+
+
+cloud:
+  aws:
+    s3:
+      bucket: ${cloud.aws.s3.bucket}
+    credentials:
+      accessKey: ${cloud.aws.credentials.accessKey}
+      secretKey: ${cloud.aws.credentials.secretKey}
+    region:
+      static: ${cloud.aws.region.static}
+    stack:
+      auto: false
+
+jwt:
+  secret: ${JWT_SECRET}
+
+
+ai:
+  api: ${ai.api}
+  url: ${ai.url}
+
+logging:
+  level:
+    # RestTemplate 자체 로그
+    org.springframework.web.client.RestTemplate: DEBUG
+    # Spring이 감싸는 HTTP 요청 공장(factory) 로그
+    org.springframework.http.client: DEBUG
+    # (만약 Apache HttpComponents 사용 시)
+    org.apache.http: DEBUG
+    org.apache.http.wire: DEBUG
+
