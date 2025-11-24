@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -39,15 +40,15 @@ public class VerificationController {
     }
 
     // 미션-AI 검증 API
-    @PostMapping("/movie-records/{movieRecordId}")
-    public ResponseEntity<String> verifiedImage(
-            @PathVariable Long movieRecordId,
-            @Valid @RequestBody AiTaskDto.sendImageFromAi request) {
+    @PostMapping(value = "/movie-records/{myMissionId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<AiTaskDto.receiveFromAi> verifiedImage(
+            @Validated @PathVariable Long myMissionId,
+            @ModelAttribute AiTaskDto.sendImageFromAi request) {
 
         Long userId = getCurrentUserId();
-        String response = aiVerify.verifyImage(movieRecordId, userId, request);
+        AiTaskDto.receiveFromAi response = aiVerify.verifyImage(myMissionId, userId, request);
 
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        return ResponseEntity.ok().body(response);
     }
 
 
