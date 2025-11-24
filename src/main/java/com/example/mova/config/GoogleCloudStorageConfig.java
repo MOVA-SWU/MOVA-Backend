@@ -19,6 +19,7 @@ import java.io.InputStream;
 @Getter
 public class GoogleCloudStorageConfig {
 
+    /*
     @Value("${GCP_PROJECT_ID}")
     private String projectId;
 
@@ -37,4 +38,6 @@ public class GoogleCloudStorageConfig {
                     .getService();
         }
     }
+
+     */
 }
