@@ -31,11 +31,17 @@ public class MissionService {
                 .map(MyMission::getMissionStatus)
                 .orElse(MissionStatus.AVAILABLE);
 
+        String checkedUrl = myMissionRepository
+                .findByUser_IdAndMission_MissionId(userId, mission.getMissionId())
+                .map(MyMission::getCheckedUrl)
+                .orElse(null);
+
         return new MissionDto.AiMissionInquire(
                 mission.getMissionId(),
                 mission.getMission(),
                 mission.getCost(),
                 mission.getCharacter(),
+                checkedUrl,
                 myStatus
         );
     }
