@@ -35,9 +35,6 @@ public class MovieRecord extends BaseEntity{
     @Column(nullable = false, length = 1000)
     private String content;
 
-    @Column(nullable = false)
-    private String checkedUrl; // 검증할 사진 URL 저장
-
     public void update(Double rating, LocalDate dateTime, String content){
         this.rating = rating;
         this.dateTime = dateTime;
