@@ -8,4 +8,6 @@ public interface VerificationService {
     VerificationDto.checkResponseDto upload(MultipartFile file);
 
     void delete(String key);
+
+    String extractFileNameFromUrl(String url);
 }

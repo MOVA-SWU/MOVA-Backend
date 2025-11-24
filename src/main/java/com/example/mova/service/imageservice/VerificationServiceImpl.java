@@ -1,17 +1,23 @@
 package com.example.mova.service.imageservice;
 
+import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3;
-import com.example.mova.config.GoogleCloudStorageConfig;
+import com.amazonaws.services.s3.model.AmazonS3Exception;
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.example.mova.dto.VerificationDto;
-import com.google.cloud.storage.BlobInfo;
-import com.google.cloud.storage.Storage;
+import com.example.mova.enums.ErrorStatus;
+import com.example.mova.errorhandler.GeneralException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.unit.DataSize;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Slf4j
@@ -19,48 +25,85 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class VerificationServiceImpl implements VerificationService{
 
-    private final Storage storage;
+    private final AmazonS3 amazonS3;
 
-    @Value("${GCP_STORAGE_BUCKET_NAME}")
-    private String bucketName;
+    @Value("${cloud.aws.s3.bucket}")
+    private String bucket;
+
+    @Value("${spring.servlet.multipart.max-file-size}")
+    private String maxSizeString;
 
     @Override
-    public VerificationDto.checkResponseDto upload(MultipartFile file) {
-        try {
-            // 업로드할 파일 이름 생성
-            String uuid = UUID.randomUUID().toString();
-            String originalFilename = file.getOriginalFilename();
-            String objectName = "verification/" + uuid +"-" + originalFilename;
+    public VerificationDto.checkResponseDto upload(MultipartFile file){
 
-            // Blob 정보 생성
-            BlobInfo blobInfo = BlobInfo.newBuilder(bucketName, objectName)
-                    .setContentType(file.getContentType())
-                    .build();
-
-            // 실제 GCS 업로드 수행
-            storage.create(blobInfo, file.getInputStream());
-
-            // 업로드된 파일 URL 생성
-            String fileUrl = String.format("https://storage.googleapis.com/%s/%s", bucketName, objectName);
-
-            // 응답 DTO 반환
-            return VerificationDto.checkResponseDto.builder()
-                    .checkedUrl(fileUrl)
-                    .key(objectName)
-                    .build();
+        // 용량 체크
+        long maxBytes = DataSize.parse(maxSizeString).toBytes();
+        if (file.getSize() > maxBytes){
+            throw new GeneralException(ErrorStatus.FILE_TOO_LARGE);
         }
-        catch (IOException e){
-            log.error("파일 업로드 실해: {}", e.getMessage());
-            throw new RuntimeException("GCS 업로드 실패", e);
+
+        String key = generateRandomFilename(file);
+
+        // 메타데이터 설정
+        ObjectMetadata meta = new ObjectMetadata();
+        meta.setContentLength(file.getSize());
+        meta.setContentType(file.getContentType());
+
+        // S3 업로드
+        try (InputStream in = file.getInputStream()) {
+            amazonS3.putObject(bucket, key, in, meta);
+        } catch (IOException e) {
+            log.error("IO error: {}", e.getMessage());
+            throw new GeneralException(ErrorStatus.FAIL_UPLOAD);
+        } catch (AmazonS3Exception e) {
+            log.error("S3 service error: {}", e.getMessage());
+            throw new GeneralException(ErrorStatus.FAIL_UPLOAD);
+        } catch (SdkClientException e) {
+            log.error("AWS SDK client error: {}", e.getMessage());
+            throw new GeneralException(ErrorStatus.FAIL_UPLOAD);
         }
+
+        // 결과 반환
+        String checkedUrl = amazonS3.getUrl(bucket, key).toString();
+        return new VerificationDto.checkResponseDto(checkedUrl, key);
+
     }
 
     @Override
     public void delete(String key){
-        boolean deleted = storage.delete(bucketName, key);
-        if (!deleted){
-            throw new RuntimeException("파일 삭제 실패 또는 존재하지 않음:" + key);
+        if (!amazonS3.doesObjectExist(bucket, key)){
+            throw  new GeneralException(ErrorStatus.NO_IMAGE_EXIST);
         }
+        try {
+            amazonS3.deleteObject(bucket, key);
+        } catch (AmazonS3Exception e) {
+            log.error("S3 service delete error: {}", e.getMessage());
+            throw new GeneralException(ErrorStatus.FAIL_DELETE);
+        } catch (SdkClientException e) {
+            log.error("AWS SDK client error on delete: {}", e.getMessage());
+            throw new GeneralException(ErrorStatus.FAIL_DELETE);
+        }
+        log.info("Deleted S3 object: {}", key);
+    }
+
+    private String generateRandomFilename(MultipartFile multipartFile) {
+        String original = multipartFile.getOriginalFilename();
+        String ext = validateFileExtension(Objects.requireNonNull(original));
+        return UUID.randomUUID() + "." + ext;
+    }
+
+    private String validateFileExtension(String filename) {
+        String ext = filename.substring(filename.lastIndexOf('.') + 1).toLowerCase();
+        List<String> allowed = List.of("jpg", "jpeg", "png", "gif");
+        if (!allowed.contains(ext)) {
+            throw new GeneralException(ErrorStatus.NO_IMAGE_EXIST);
+        }
+        return ext;
+    }
+
+    @Override
+    public String extractFileNameFromUrl(String url) {
+        return url.substring(url.lastIndexOf("/") + 1);
     }
 
 }
