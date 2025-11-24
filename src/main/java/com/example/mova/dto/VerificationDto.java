@@ -2,6 +2,7 @@ package com.example.mova.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 public class VerificationDto {
 
@@ -10,7 +11,7 @@ public class VerificationDto {
     public static class checkRequestDto{
         @NotBlank(message = "사진을 기입해주세요.")
         private String name;
-        private String multipartFile;
+        private MultipartFile image;
     }
 
     @Getter
@@ -24,10 +25,4 @@ public class VerificationDto {
         private String key;
     }
 
-    @Getter
-    @Builder
-    public static class sendImageFromAI{
-        private String checkedUrl;
-        private String mission;
-    }
 }
