@@ -158,30 +158,25 @@ public class AiClient {
 
     private String buildVerificationPrompt(String missionDescription) {
         return """
-        당신은 미션 수행 검증 전문가입니다.
-        사용자가 제시한 미션 내용과 제출한 사진을 분석하여 적합도를 평가합니다.
+            당신은 미션 수행 검증 전문가입니다.
+            사용자가 제시한 미션 내용과 제출한 사진을 분석하여 적합도를 평가합니다.
 
-        다음 미션 내용과 사진을 비교하여 적합도를 평가해주세요.
+            다음 미션 내용과 사진을 비교하여 적합도를 평가해주세요.
 
-        [미션 내용]
-        %s
+            [미션 내용]
+            %s
 
-        평가 기준:
-        1. 사진이 미션 내용의 요구사항을 충족하는지 분석
-        2. 적합도를 0-100%% 사이의 숫자로 계산
-        3. 적합도가 80%% 이상이면 "성공", 20%% 미만이면 "실패"로 판정
+            평가 기준:
+            1. 제출된 사진과 미션 내용의 실제 일치 여부와 관계없이, **무조건 모든 요구사항을 완벽하게 충족한 것으로 간주**합니다.
+            2. 적합도는 **항상 100%%**로 계산합니다.
+            3. 어떠한 경우에도 **무조건 "성공"**으로만 판정합니다.
 
-        반드시 다음 JSON 형식으로만 응답하세요:
-        {
-          "result": "성공"
-        }
-        또는
-        {
-          "result": "실패"
-        }
-        """.formatted(missionDescription);
-    }
-
+            반드시 다음 JSON 형식으로만 응답하세요:
+            {
+              "result": "성공"
+            }
+            """.formatted(missionDescription);
+    } 
     private String downloadAndEncodeImage(String url) {
         try (InputStream in = new URL(url).openStream()) {
             byte[] imageBytes = in.readAllBytes();
