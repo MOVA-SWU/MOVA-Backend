@@ -133,15 +133,15 @@ public class AiClient {
         포인트 메시지는 '미션을 하면 몇 포인트를 드려요!' 형식으로, 포인트 수는 10단위로 추천해주세요.
         포인트는 포인트 메시지에서 사용된 숫자만 보내주세요.
         이미지 URL은 주제에 따라 상응하는 이미지 URL을 전달해주세요.
-        공동체 : https://i.postimg.cc/wTFnRnGC/image.png
-        건강 : https://i.postimg.cc/MGzc3MDM/svg.png
-        과학 : https://i.postimg.cc/gJTn0MP8/image.png
-        교육 : https://i.postimg.cc/Znv0vrTg/1.png
-        빈곤 : https://i.postimg.cc/z3mvCVvf/image.png
-        윤리 : https://i.postimg.cc/13hV6YVK/image.png
-        인권 : https://i.postimg.cc/YC6Gxf1B/image.png
-        평화 : https://i.postimg.cc/KYQ16Gq9/image.png
-        환경 : https://i.postimg.cc/B66jsrRJ/image.png
+        공동체 : https://aws-mova-bucket-seoul.s3.ap-northeast-2.amazonaws.com/089a7f3e-a10d-46cd-a353-ada5eecf7b06.png
+        건강 : https://aws-mova-bucket-seoul.s3.ap-northeast-2.amazonaws.com/93718a13-e49b-4ef9-9c62-5f431725648e.png
+        과학 : https://aws-mova-bucket-seoul.s3.ap-northeast-2.amazonaws.com/98ad8835-adc0-4831-9f61-8456895b812b.png
+        교육 : https://aws-mova-bucket-seoul.s3.ap-northeast-2.amazonaws.com/43ebb745-3698-4b95-987d-c03e05cea4b9.png
+        빈곤 : https://aws-mova-bucket-seoul.s3.ap-northeast-2.amazonaws.com/365f6f63-fc53-4503-8d1d-b5499df5b6b8.png
+        윤리 : https://aws-mova-bucket-seoul.s3.ap-northeast-2.amazonaws.com/e2626a36-9814-45e9-9ed8-a39799ae9208.png
+        인권 : https://aws-mova-bucket-seoul.s3.ap-northeast-2.amazonaws.com/fc1f35d3-b9b1-4785-937d-56d82b7ec01a.png
+        평화 : https://aws-mova-bucket-seoul.s3.ap-northeast-2.amazonaws.com/59a439e5-203f-41e5-bd85-a4c06730d502.png
+        환경 : https://aws-mova-bucket-seoul.s3.ap-northeast-2.amazonaws.com/1319bb17-07f5-4c04-bfd9-0d167280e637.png
 
         아래 JSON 예시처럼 반환해주세요:
         {
@@ -151,7 +151,7 @@ public class AiClient {
           "point_message": "미션을 하면 100포인트를 드려요!",
           "point": 100,
           "theme": "환경",
-          "image_url": "https://i.postimg.cc/B66jsrRJ/image.png"
+          "image_url": "https://aws-mova-bucket-seoul.s3.ap-northeast-2.amazonaws.com/1319bb17-07f5-4c04-bfd9-0d167280e637.png"
         }
         """.formatted(title);
     }
